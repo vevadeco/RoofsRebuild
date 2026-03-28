@@ -21,6 +21,10 @@ export function LeadForm() {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error();
+      // Fire FB Lead event if pixel is loaded
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead');
+      }
       toast.success("Thank you! We'll contact you soon.");
       setForm({ name: '', email: '', phone: '', service_type: '', message: '' });
     } catch {
