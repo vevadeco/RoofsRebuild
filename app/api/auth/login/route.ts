@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
     res.cookies.set('refresh_token', refreshToken, { httpOnly: true, secure: isProd, sameSite: 'lax', maxAge: 604800, path: '/' });
     return res;
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ detail: 'Internal server error' }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('[login]', message);
+    return NextResponse.json({ detail: message }, { status: 500 });
   }
 }
