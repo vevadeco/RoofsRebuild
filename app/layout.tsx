@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import './globals.css';
-import { Navbar } from '@/components/Navbar';
 import { Toaster } from '@/components/ui/sonner';
 import { getSetting } from '@/lib/db';
 
@@ -56,7 +55,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       </head>
       <body>
-        <Navbar />
         {children}
         <Toaster position="top-right" richColors />
       </body>

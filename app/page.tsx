@@ -1,5 +1,6 @@
 import { Shield, Wrench, Home, CheckCircle, Star, Quote } from 'lucide-react';
 import { LeadForm } from '@/components/LeadForm';
+import { PublicNavbar } from '@/components/PublicNavbar';
 
 const services = [
   {
@@ -71,8 +72,9 @@ function Stars({ count }: { count: number }) {
 export default function LandingPage() {
   return (
     <div>
+      <PublicNavbar />
       {/* Hero */}
-      <section className="hero-bg min-h-[90vh] flex items-center py-16 md:py-24">
+      <section id="hero" className="hero-bg min-h-[90vh] flex items-center py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 w-full">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -100,7 +102,7 @@ export default function LandingPage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 md:py-24 bg-slate-50">
+      <section id="services" className="py-16 md:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Our Services</h2>
@@ -130,7 +132,7 @@ export default function LandingPage() {
       </section>
 
       {/* Reviews */}
-      <section className="py-16 md:py-24 bg-white">
+      <section id="reviews" className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-2 mb-4">
@@ -165,7 +167,7 @@ export default function LandingPage() {
       </section>
 
       {/* Service Areas */}
-      <section className="py-16 md:py-24 bg-slate-50">
+      <section id="areas" className="py-16 md:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Areas We Serve</h2>
