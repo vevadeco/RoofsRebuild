@@ -74,27 +74,27 @@ export default function LandingPage() {
     <div>
       <PublicNavbar />
       {/* Hero */}
-      <section id="hero" className="hero-bg min-h-[90vh] flex items-center py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 w-full">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section id="hero" className="hero-bg min-h-[90vh] flex items-center py-12 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24 w-full">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
-              <h1 className="text-5xl sm:text-6xl font-bold tracking-tighter leading-none text-white mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter leading-none text-white mb-6">
                 Canada's Trusted
                 <span className="block text-red-500 mt-2">Roofing Experts</span>
               </h1>
-              <p className="text-base leading-relaxed text-slate-100 mb-8 max-w-xl">
+              <p className="text-sm sm:text-base leading-relaxed text-slate-100 mb-8 max-w-xl">
                 Professional roofing services for homes and businesses across Canada. Quality workmanship, competitive pricing, and lifetime warranties.
               </p>
-              <div className="flex flex-wrap gap-6">
+              <div className="flex flex-wrap gap-4">
                 {['Licensed & Insured', 'Free Estimates', '24/7 Emergency'].map((item) => (
                   <div key={item} className="flex items-center gap-2">
-                    <CheckCircle className="text-green-400 h-5 w-5" />
-                    <span className="text-white font-medium">{item}</span>
+                    <CheckCircle className="text-green-400 h-5 w-5 shrink-0" />
+                    <span className="text-white font-medium text-sm">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div>
+            <div className="mt-4 md:mt-0">
               <LeadForm />
             </div>
           </div>
@@ -102,15 +102,15 @@ export default function LandingPage() {
       </section>
 
       {/* Services */}
-      <section id="services" className="py-16 md:py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Our Services</h2>
-            <p className="text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
+      <section id="services" className="py-12 md:py-24 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+          <div className="text-center mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Our Services</h2>
+            <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
               From minor repairs to complete roof replacements, we handle it all with precision and care.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {services.map((s) => (
               <div key={s.title} className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-lg overflow-hidden card-hover">
                 <div className="h-48 overflow-hidden">
@@ -132,23 +132,23 @@ export default function LandingPage() {
       </section>
 
       {/* Reviews */}
-      <section id="reviews" className="py-16 md:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-          <div className="text-center mb-12">
+      <section id="reviews" className="py-12 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+          <div className="text-center mb-10 md:mb-12">
             <div className="flex items-center justify-center gap-2 mb-4">
               <div className="flex gap-1">
-                {[...Array(5)].map((_, i) => <Star key={i} className="h-6 w-6 fill-yellow-500 text-yellow-500" />)}
+                {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 md:h-6 md:w-6 fill-yellow-500 text-yellow-500" />)}
               </div>
-              <span className="text-2xl font-bold text-slate-900">4.9/5</span>
+              <span className="text-xl md:text-2xl font-bold text-slate-900">4.9/5</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 mb-4">What Our Clients Say</h2>
-            <p className="text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4">What Our Clients Say</h2>
+            <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
               Trusted by thousands of homeowners across Canada for quality roofing services.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {reviews.map((r) => (
-              <div key={r.name} className="bg-slate-50 border border-slate-100 p-8 rounded-lg testimonial-card">
+              <div key={r.name} className="bg-slate-50 border border-slate-100 p-6 md:p-8 rounded-lg testimonial-card">
                 <Quote className="text-red-600 h-8 w-8 mb-4" />
                 <div className="mb-4"><Stars count={r.rating} /></div>
                 <p className="text-base leading-relaxed text-slate-700 mb-6">"{r.review}"</p>
@@ -167,19 +167,19 @@ export default function LandingPage() {
       </section>
 
       {/* Service Areas */}
-      <section id="areas" className="py-16 md:py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Areas We Serve</h2>
-            <p className="text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
+      <section id="areas" className="py-12 md:py-24 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+          <div className="text-center mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Areas We Serve</h2>
+            <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
               Providing professional roofing services across Southern Ontario
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
             {areas.map((a) => (
-              <div key={a.city} className="bg-white border border-slate-200 p-6 rounded-lg text-center card-hover">
-                <div className="text-4xl mb-3">{a.icon}</div>
-                <h3 className="text-lg font-semibold text-slate-900">{a.city}</h3>
+              <div key={a.city} className="bg-white border border-slate-200 p-4 md:p-6 rounded-lg text-center card-hover">
+                <div className="text-3xl md:text-4xl mb-2 md:mb-3">{a.icon}</div>
+                <h3 className="text-sm md:text-lg font-semibold text-slate-900">{a.city}</h3>
               </div>
             ))}
           </div>
@@ -193,13 +193,13 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-24 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 text-center">
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">Ready to Get Started?</h2>
-          <p className="text-base leading-relaxed text-slate-300 mb-8 max-w-2xl mx-auto">
+      <section className="py-12 md:py-24 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">Ready to Get Started?</h2>
+          <p className="text-sm sm:text-base leading-relaxed text-slate-300 mb-8 max-w-2xl mx-auto">
             Contact us today for a free, no-obligation quote. Our team is ready to help protect your home.
           </p>
-          <a href="#" className="inline-block bg-red-600 text-white font-medium hover:bg-red-700 transition-colors px-8 py-4 rounded-md shadow-sm">
+          <a href="#hero" className="inline-block bg-red-600 text-white font-medium hover:bg-red-700 transition-colors px-8 py-4 rounded-md shadow-sm">
             Get Free Quote
           </a>
         </div>

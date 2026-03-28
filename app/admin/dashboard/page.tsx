@@ -68,29 +68,29 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24 py-8 md:py-12">
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 mb-2">Lead Dashboard</h1>
           <p className="text-base text-slate-600">Welcome back, {user?.name ?? 'Admin'}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
           {[
             { label: 'Total Leads', value: stats.total, color: 'text-slate-900' },
             { label: 'New', value: stats.new, color: 'text-blue-600' },
             { label: 'Contacted', value: stats.contacted, color: 'text-yellow-600' },
             { label: 'Converted', value: stats.converted, color: 'text-green-600' },
           ].map((s) => (
-            <div key={s.label} className="bg-white border border-slate-200 p-6 rounded-md shadow-sm">
+            <div key={s.label} className="bg-white border border-slate-200 p-4 md:p-6 rounded-md shadow-sm">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">{s.label}</p>
-              <p className={`text-3xl font-bold ${s.color}`}>{s.value}</p>
+              <p className={`text-2xl md:text-3xl font-bold ${s.color}`}>{s.value}</p>
             </div>
           ))}
         </div>
 
         <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-slate-200">
-            <h2 className="text-xl font-medium tracking-tight text-slate-800">All Leads</h2>
+          <div className="p-4 md:p-6 border-b border-slate-200">
+            <h2 className="text-lg md:text-xl font-medium tracking-tight text-slate-800">All Leads</h2>
           </div>
           <Table>
             <TableHeader>

@@ -155,7 +155,7 @@ export default function AdminSettings() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2">Settings</h1>
           <p className="text-slate-600">Manage integrations, SEO, and analytics.</p>

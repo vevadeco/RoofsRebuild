@@ -23,7 +23,14 @@ h1, h2, h3, h4, h5, h6 {
     url('https://images.pexels.com/photos/29247157/pexels-photo-29247157.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  /* fixed attachment breaks on iOS Safari — use scroll */
+  background-attachment: scroll;
+}
+
+@media (min-width: 1024px) {
+  .hero-bg {
+    background-attachment: fixed;
+  }
 }
 
 .card-hover {
