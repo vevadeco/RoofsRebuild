@@ -1,53 +1,18 @@
-import { Shield, Wrench, Home, CheckCircle, Star, Quote } from 'lucide-react';
+import { Shield, Wrench, Home, CheckCircle, Star, Layers, Sun, Droplets, Leaf, AlignJustify, PanelTop, Clock, Users, Sparkles, BadgeCheck } from 'lucide-react';
 import { LeadForm } from '@/components/LeadForm';
 import { PublicNavbar } from '@/components/PublicNavbar';
+import { ReviewCarousel } from '@/components/ReviewCarousel';
 
 const services = [
-  {
-    title: 'Roof Repair',
-    description: 'Fast, reliable repairs to protect your home from the elements.',
-    image: 'https://images.unsplash.com/photo-1726589004565-bedfba94d3a2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwzfHxyb29maW5nJTIwd29ya2VyJTIwcmVwYWlyJTIwc2hpbmdsZXN8ZW58MHx8fHwxNzc0NjU0NjE2fDA&ixlib=rb-4.1.0&q=85',
-    icon: Wrench,
-  },
-  {
-    title: 'Shingle Replacement',
-    description: 'Premium quality shingles installed by certified professionals.',
-    image: 'https://images.pexels.com/photos/9431615/pexels-photo-9431615.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    icon: Shield,
-  },
-  {
-    title: 'New Roofs',
-    description: 'Complete roof installation with lifetime warranties available.',
-    image: 'https://images.pexels.com/photos/12081268/pexels-photo-12081268.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    icon: Home,
-  },
-];
-
-const reviews = [
-  {
-    name: 'Sarah & Michael Chen',
-    location: 'Toronto, ON',
-    rating: 5,
-    review: 'Roofs Canada did an amazing job on our roof replacement. The team was professional, efficient, and cleaned up perfectly. Highly recommend!',
-    image: 'https://images.pexels.com/photos/7579360/pexels-photo-7579360.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    service: 'New Roof Installation',
-  },
-  {
-    name: 'David Thompson',
-    location: 'Vancouver, BC',
-    rating: 5,
-    review: 'After a storm damaged our roof, Roofs Canada responded within hours. Their emergency repair service saved us from further water damage.',
-    image: 'https://images.unsplash.com/photo-1755190897791-7040dfdb988f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwzfHxoYXBweSUyMGhvbWVvd25lciUyMHRlc3RpbW9uaWFsJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzc0NjU3NzYzfDA&ixlib=rb-4.1.0&q=85',
-    service: 'Emergency Roof Repair',
-  },
-  {
-    name: 'Jennifer & Robert Martinez',
-    location: 'Calgary, AB',
-    rating: 5,
-    review: 'We got quotes from 3 companies and Roofs Canada offered the best value with premium materials. The installation was flawless.',
-    image: 'https://images.pexels.com/photos/8292843/pexels-photo-8292843.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    service: 'Shingle Replacement',
-  },
+  { title: 'Leak & Roof Repair', description: 'Fast diagnosis and reliable repairs to stop leaks and protect your home before damage spreads.', icon: Droplets },
+  { title: 'Roof Reshingling', description: 'Full reshingling with premium materials and expert installation for lasting protection.', icon: Layers },
+  { title: 'Metal Roof Installation', description: 'Durable, energy-efficient metal roofing built to handle Ontario\'s toughest weather.', icon: Shield },
+  { title: 'Flat Roof Installation', description: 'Commercial-grade flat roofing systems installed with precision and long-term performance in mind.', icon: PanelTop },
+  { title: 'Euroshield Rubber Shingles', description: 'Eco-friendly rubber shingles made from recycled tires — impact resistant and beautifully designed.', icon: Leaf },
+  { title: 'Skylights & Solar Tubes', description: 'Bring natural light into your home with professionally installed skylights and solar tube systems.', icon: Sun },
+  { title: 'Gutters & Gutter Guard', description: 'Keep water flowing away from your foundation with new gutters and clog-free gutter guard systems.', icon: AlignJustify },
+  { title: 'Siding Installation', description: 'Refresh your home\'s exterior with quality siding that improves curb appeal and insulation.', icon: Home },
+  { title: 'New Roof Installation', description: 'Complete new roof builds for new construction or full replacements, done right the first time.', icon: Wrench },
 ];
 
 const areas = [
@@ -59,31 +24,29 @@ const areas = [
   { city: 'St. Catharines', icon: '🍇' },
 ];
 
-function Stars({ count }: { count: number }) {
-  return (
-    <div className="flex gap-1">
-      {[...Array(5)].map((_, i) => (
-        <Star key={i} className={`h-4 w-4 ${i < count ? 'fill-yellow-500 text-yellow-500' : 'text-slate-300'}`} />
-      ))}
-    </div>
-  );
-}
+const promises = [
+  { icon: Clock, title: 'Prompt Response', description: 'We respond quickly — because a damaged roof can\'t wait.' },
+  { icon: Users, title: 'Professional Crew', description: 'Trained, certified, and courteous tradespeople on every job.' },
+  { icon: Sparkles, title: 'No Mess', description: 'We clean up completely. You\'ll barely know we were there.' },
+  { icon: BadgeCheck, title: 'Limited Lifetime Warranty', description: 'Our workmanship is backed by a limited lifetime warranty for your peace of mind.' },
+];
 
 export default function LandingPage() {
   return (
     <div>
       <PublicNavbar />
+
       {/* Hero */}
       <section id="hero" className="hero-bg min-h-[90vh] flex items-center py-12 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24 w-full">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter leading-none text-white mb-6">
-                Canada's Trusted
+                Ontario's Trusted
                 <span className="block text-red-500 mt-2">Roofing Experts</span>
               </h1>
               <p className="text-sm sm:text-base leading-relaxed text-slate-100 mb-8 max-w-xl">
-                Professional roofing services for homes and businesses across Canada. Quality workmanship, competitive pricing, and lifetime warranties.
+                Professional roofing services for homes and businesses across Southern Ontario. Quality workmanship, competitive pricing, and lifetime warranties.
               </p>
               <div className="flex flex-wrap gap-4">
                 {['Licensed & Insured', 'Free Estimates', '24/7 Emergency'].map((item) => (
@@ -104,27 +67,45 @@ export default function LandingPage() {
       {/* Services */}
       <section id="services" className="py-12 md:py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
-          <div className="text-center mb-10 md:mb-12">
+          <div className="text-center mb-10 md:mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4">Our Services</h2>
             <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
-              From minor repairs to complete roof replacements, we handle it all with precision and care.
+              From minor repairs to complete installations, we handle every roofing need with precision and care.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {services.map((s) => (
-              <div key={s.title} className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-lg overflow-hidden card-hover">
-                <div className="h-48 overflow-hidden">
-                  <img src={s.image} alt={s.title} className="w-full h-full object-cover" />
+              <div key={s.title} className="bg-white border border-slate-100 rounded-lg p-6 flex gap-4 card-hover shadow-[0_2px_12px_rgb(0,0,0,0.04)]">
+                <div className="w-11 h-11 bg-red-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                  <s.icon className="text-red-600 h-5 w-5" />
                 </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <s.icon className="text-red-600 h-5 w-5" />
-                    </div>
-                    <h3 className="text-xl font-medium tracking-tight text-slate-800">{s.title}</h3>
-                  </div>
-                  <p className="text-base leading-relaxed text-slate-600">{s.description}</p>
+                <div>
+                  <h3 className="text-base font-semibold text-slate-800 mb-1">{s.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-500">{s.description}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Promise */}
+      <section className="py-12 md:py-24 bg-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">Our Promise</h2>
+            <p className="text-sm sm:text-base leading-relaxed text-slate-400 max-w-2xl mx-auto">
+              Every job we take on comes with the same commitment to quality, respect, and results.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {promises.map((p) => (
+              <div key={p.title} className="text-center">
+                <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <p.icon className="text-white h-7 w-7" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">{p.title}</h3>
+                <p className="text-sm leading-relaxed text-slate-400">{p.description}</p>
               </div>
             ))}
           </div>
@@ -143,26 +124,10 @@ export default function LandingPage() {
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4">What Our Clients Say</h2>
             <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-2xl mx-auto">
-              Trusted by thousands of homeowners across Canada for quality roofing services.
+              Trusted by homeowners across Southern Ontario for quality roofing services.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-            {reviews.map((r) => (
-              <div key={r.name} className="bg-slate-50 border border-slate-100 p-6 md:p-8 rounded-lg testimonial-card">
-                <Quote className="text-red-600 h-8 w-8 mb-4" />
-                <div className="mb-4"><Stars count={r.rating} /></div>
-                <p className="text-base leading-relaxed text-slate-700 mb-6">"{r.review}"</p>
-                <div className="flex items-center gap-4">
-                  <img src={r.image} alt={r.name} className="w-12 h-12 rounded-full object-cover" />
-                  <div>
-                    <p className="font-semibold text-slate-900">{r.name}</p>
-                    <p className="text-sm text-slate-500">{r.location}</p>
-                    <p className="text-xs text-red-600 mt-1">{r.service}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ReviewCarousel />
         </div>
       </section>
 
@@ -179,13 +144,13 @@ export default function LandingPage() {
             {areas.map((a) => (
               <div key={a.city} className="bg-white border border-slate-200 p-4 md:p-6 rounded-lg text-center card-hover">
                 <div className="text-3xl md:text-4xl mb-2 md:mb-3">{a.icon}</div>
-                <h3 className="text-sm md:text-lg font-semibold text-slate-900">{a.city}</h3>
+                <h3 className="text-sm md:text-base font-semibold text-slate-900">{a.city}</h3>
               </div>
             ))}
           </div>
-          <div className="mt-12 text-center">
-            <p className="text-slate-600 mb-4">Don't see your city listed?</p>
-            <a href="#" className="text-red-600 font-medium hover:text-red-700 transition-colors">
+          <div className="mt-10 text-center">
+            <p className="text-slate-600 mb-3 text-sm">Don't see your city listed?</p>
+            <a href="#hero" className="text-red-600 font-medium hover:text-red-700 transition-colors text-sm">
               Contact us to check if we serve your area →
             </a>
           </div>
@@ -193,14 +158,14 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-12 md:py-24 bg-slate-900">
+      <section className="py-12 md:py-24 bg-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4">Ready to Get Started?</h2>
-          <p className="text-sm sm:text-base leading-relaxed text-slate-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base leading-relaxed text-red-100 mb-8 max-w-2xl mx-auto">
             Contact us today for a free, no-obligation quote. Our team is ready to help protect your home.
           </p>
-          <a href="#hero" className="inline-block bg-red-600 text-white font-medium hover:bg-red-700 transition-colors px-8 py-4 rounded-md shadow-sm">
-            Get Free Quote
+          <a href="#hero" className="inline-block bg-white text-red-600 font-semibold hover:bg-red-50 transition-colors px-8 py-4 rounded-md shadow-sm">
+            Get Your Free Quote
           </a>
         </div>
       </section>

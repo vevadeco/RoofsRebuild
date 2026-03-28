@@ -57,9 +57,15 @@ export function LeadForm() {
               <SelectValue placeholder="Select a service" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Roof Repair">Roof Repair</SelectItem>
-              <SelectItem value="Shingle Replacement">Shingle Replacement</SelectItem>
-              <SelectItem value="New Roof">New Roof</SelectItem>
+              <SelectItem value="Leak & Roof Repair">Leak & Roof Repair</SelectItem>
+              <SelectItem value="Roof Reshingling">Roof Reshingling</SelectItem>
+              <SelectItem value="Metal Roof Installation">Metal Roof Installation</SelectItem>
+              <SelectItem value="Flat Roof Installation">Flat Roof Installation</SelectItem>
+              <SelectItem value="Euroshield Rubber Shingles">Euroshield Rubber Shingles</SelectItem>
+              <SelectItem value="Skylights & Solar Tubes">Skylights & Solar Tubes</SelectItem>
+              <SelectItem value="Gutters & Gutter Guard">Gutters & Gutter Guard</SelectItem>
+              <SelectItem value="Siding Installation">Siding Installation</SelectItem>
+              <SelectItem value="New Roof Installation">New Roof Installation</SelectItem>
             </SelectContent>
           </Select>
         </div>
