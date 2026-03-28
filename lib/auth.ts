@@ -34,7 +34,7 @@ export async function verifyAccessToken(token: string) {
 }
 
 export async function getSessionUser() {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const token = cookieStore.get('access_token')?.value;
   if (!token) return null;
   try {
