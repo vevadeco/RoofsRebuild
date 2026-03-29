@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Plus, Trash2 } from 'lucide-react';
@@ -12,10 +12,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 type Lead = { id: string; name: string; email: string; service_type: string };
 type LineItem = { description: string; qty: number; unit_price: number };
 
-export default function NewEstimatePage() {
+// Inner component reads searchParams — must be inside Suspense
+function NewEstimateForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedLeadId = searchParams.get('lead_id') ?? '';
+
   const [leads, setLeads] = useState<Lead[]>([]);
   const [leadId, setLeadId] = useState(preselectedLeadId);
   const [items, setItems] = useState<LineItem[]>([{ description: '', qty: 1, unit_price: 0 }]);
@@ -63,7 +65,6 @@ export default function NewEstimatePage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Lead */}
           <div className="bg-white border border-slate-200 rounded-md p-6 space-y-4">
             <h2 className="font-medium text-slate-800">Client</h2>
             <div>
@@ -81,40 +82,23 @@ export default function NewEstimatePage() {
             </div>
           </div>
 
-          {/* Line Items */}
           <div className="bg-white border border-slate-200 rounded-md p-6 space-y-4">
             <h2 className="font-medium text-slate-800">Line Items</h2>
             <div className="space-y-3">
               {items.map((item, i) => (
                 <div key={i} className="grid grid-cols-12 gap-2 items-start">
                   <div className="col-span-12 sm:col-span-6">
-                    <Input
-                      placeholder="Description"
-                      value={item.description}
-                      onChange={e => updateItem(i, 'description', e.target.value)}
-                      className="border-slate-300"
-                      required
-                    />
+                    <Input placeholder="Description" value={item.description} onChange={e => updateItem(i, 'description', e.target.value)} className="border-slate-300" required />
                   </div>
                   <div className="col-span-4 sm:col-span-2">
-                    <Input
-                      type="number" min="1" placeholder="Qty"
-                      value={item.qty}
-                      onChange={e => updateItem(i, 'qty', Number(e.target.value))}
-                      className="border-slate-300"
-                    />
+                    <Input type="number" min="1" placeholder="Qty" value={item.qty} onChange={e => updateItem(i, 'qty', Number(e.target.value))} className="border-slate-300" />
                   </div>
                   <div className="col-span-6 sm:col-span-3">
-                    <Input
-                      type="number" min="0" step="0.01" placeholder="Unit price"
-                      value={item.unit_price}
-                      onChange={e => updateItem(i, 'unit_price', Number(e.target.value))}
-                      className="border-slate-300"
-                    />
+                    <Input type="number" min="0" step="0.01" placeholder="Unit price" value={item.unit_price} onChange={e => updateItem(i, 'unit_price', Number(e.target.value))} className="border-slate-300" />
                   </div>
                   <div className="col-span-2 sm:col-span-1 flex items-center justify-end">
                     {items.length > 1 && (
-                      <button type="button" onClick={() => removeItem(i)} className="text-slate-400 hover:text-red-600 transition-colors p-1">
+                      <button type="button" onClick={() => removeItem(i)} className="text-slate-400 hover:text-red-600 p-1">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     )}
@@ -125,7 +109,6 @@ export default function NewEstimatePage() {
             <Button type="button" variant="outline" onClick={addItem} className="gap-2 border-slate-300 text-slate-600 text-sm">
               <Plus className="h-4 w-4" /> Add Line Item
             </Button>
-
             <div className="border-t border-slate-100 pt-4 flex justify-end">
               <div className="text-right">
                 <p className="text-sm text-slate-500">Subtotal</p>
@@ -134,7 +117,6 @@ export default function NewEstimatePage() {
             </div>
           </div>
 
-          {/* Notes */}
           <div className="bg-white border border-slate-200 rounded-md p-6">
             <Label htmlFor="notes" className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Notes (optional)</Label>
             <Textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} rows={3} className="mt-1 border-slate-300 resize-none" placeholder="Any additional notes for the client..." />
@@ -149,5 +131,17 @@ export default function NewEstimatePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function NewEstimatePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-600" />
+      </div>
+    }>
+      <NewEstimateForm />
+    </Suspense>
   );
 }
