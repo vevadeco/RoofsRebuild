@@ -31,6 +31,9 @@ export async function GET() {
     fb_access_token: settings.fb_access_token ? '••••••••' : '',
     fb_access_token_set: !!settings.fb_access_token,
     fb_dataset_id: settings.fb_dataset_id ?? '',
+    stripe_secret_key_set: !!settings.stripe_secret_key,
+    stripe_publishable_key: settings.stripe_publishable_key ?? '',
+    stripe_webhook_secret_set: !!settings.stripe_webhook_secret,
   });
 }
 
@@ -46,6 +49,7 @@ export async function POST(req: NextRequest) {
     'seo_title', 'seo_description', 'seo_keywords', 'seo_og_image',
     'gtag_id',
     'fb_pixel_id', 'fb_access_token', 'fb_dataset_id',
+    'stripe_secret_key', 'stripe_publishable_key', 'stripe_webhook_secret',
   ];
   for (const key of allowed) {
     if (typeof body[key] === 'string' && body[key].trim() !== '') {

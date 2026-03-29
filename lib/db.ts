@@ -43,6 +43,38 @@ export async function initDb() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS estimates (
+      id TEXT PRIMARY KEY,
+      lead_id TEXT NOT NULL REFERENCES leads(id),
+      number TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'draft',
+      items JSONB NOT NULL DEFAULT '[]',
+      notes TEXT NOT NULL DEFAULT '',
+      subtotal NUMERIC(10,2) NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      sent_at TIMESTAMPTZ,
+      accepted_at TIMESTAMPTZ
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS invoices (
+      id TEXT PRIMARY KEY,
+      estimate_id TEXT NOT NULL REFERENCES estimates(id),
+      lead_id TEXT NOT NULL REFERENCES leads(id),
+      number TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending',
+      payment_method TEXT,
+      subtotal NUMERIC(10,2) NOT NULL,
+      tax NUMERIC(10,2) NOT NULL DEFAULT 0,
+      transaction_fee NUMERIC(10,2) NOT NULL DEFAULT 0,
+      total NUMERIC(10,2) NOT NULL,
+      stripe_session_id TEXT,
+      stripe_payment_intent TEXT,
+      paid_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
 }
 
 export async function getSetting(key: string): Promise<string | null> {

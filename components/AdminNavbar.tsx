@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Home, Settings, LayoutDashboard, Menu, X, LogOut } from 'lucide-react';
+import { Home, Settings, LayoutDashboard, Menu, X, LogOut, FileText, Receipt } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
 
 export function AdminNavbar() {
@@ -32,6 +32,12 @@ export function AdminNavbar() {
             <Link href="/admin/dashboard" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-red-600 transition-colors">
               <LayoutDashboard className="h-4 w-4" /> Dashboard
             </Link>
+            <Link href="/admin/estimates" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-red-600 transition-colors">
+              <FileText className="h-4 w-4" /> Estimates
+            </Link>
+            <Link href="/admin/invoices" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-red-600 transition-colors">
+              <Receipt className="h-4 w-4" /> Invoices
+            </Link>
             <Link href="/admin/settings" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-red-600 transition-colors">
               <Settings className="h-4 w-4" /> Settings
             </Link>
@@ -56,6 +62,12 @@ export function AdminNavbar() {
         <div className="md:hidden border-t border-slate-100 bg-white px-4 py-3 flex flex-col gap-1">
           <Link href="/admin/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 text-sm text-slate-700 hover:text-red-600 px-3 py-2.5 rounded-md hover:bg-slate-50 transition-colors">
             <LayoutDashboard className="h-4 w-4" /> Dashboard
+          </Link>
+          <Link href="/admin/estimates" onClick={() => setOpen(false)} className="flex items-center gap-2 text-sm text-slate-700 hover:text-red-600 px-3 py-2.5 rounded-md hover:bg-slate-50 transition-colors">
+            <FileText className="h-4 w-4" /> Estimates
+          </Link>
+          <Link href="/admin/invoices" onClick={() => setOpen(false)} className="flex items-center gap-2 text-sm text-slate-700 hover:text-red-600 px-3 py-2.5 rounded-md hover:bg-slate-50 transition-colors">
+            <Receipt className="h-4 w-4" /> Invoices
           </Link>
           <Link href="/admin/settings" onClick={() => setOpen(false)} className="flex items-center gap-2 text-sm text-slate-700 hover:text-red-600 px-3 py-2.5 rounded-md hover:bg-slate-50 transition-colors">
             <Settings className="h-4 w-4" /> Settings

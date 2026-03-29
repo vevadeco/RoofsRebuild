@@ -21,8 +21,9 @@ type Settings = {
   gtag_id: string;
   // Facebook
   fb_pixel_id: string;
-  fb_access_token_set: boolean;
-  fb_dataset_id: string;
+  stripe_secret_key_set: boolean;
+  stripe_publishable_key: string;
+  stripe_webhook_secret_set: boolean;
 };
 
 const defaultSettings: Settings = {
@@ -37,6 +38,9 @@ const defaultSettings: Settings = {
   fb_pixel_id: '',
   fb_access_token_set: false,
   fb_dataset_id: '',
+  stripe_secret_key_set: false,
+  stripe_publishable_key: '',
+  stripe_webhook_secret_set: false,
 };
 
 function SectionCard({ title, status, children }: {
@@ -79,8 +83,12 @@ export default function AdminSettings() {
   const [s, setS] = useState<Settings>(defaultSettings);
   const [newResendKey, setNewResendKey] = useState('');
   const [newFbToken, setNewFbToken] = useState('');
+  const [newStripeSecret, setNewStripeSecret] = useState('');
+  const [newStripeWebhook, setNewStripeWebhook] = useState('');
   const [showResend, setShowResend] = useState(false);
   const [showFbToken, setShowFbToken] = useState(false);
+  const [showStripeSecret, setShowStripeSecret] = useState(false);
+  const [showStripeWebhook, setShowStripeWebhook] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -113,6 +121,9 @@ export default function AdminSettings() {
       };
       if (newResendKey.trim()) body.resend_api_key = newResendKey.trim();
       if (newFbToken.trim()) body.fb_access_token = newFbToken.trim();
+      if (newStripeSecret.trim()) body.stripe_secret_key = newStripeSecret.trim();
+      if (newStripeWebhook.trim()) body.stripe_webhook_secret = newStripeWebhook.trim();
+      if (s.stripe_publishable_key.trim()) body.stripe_publishable_key = s.stripe_publishable_key.trim();
 
       const res = await fetch('/api/settings', {
         method: 'POST',
@@ -123,6 +134,8 @@ export default function AdminSettings() {
 
       if (newResendKey.trim()) { setS((p) => ({ ...p, resend_api_key_set: true })); setNewResendKey(''); }
       if (newFbToken.trim()) { setS((p) => ({ ...p, fb_access_token_set: true })); setNewFbToken(''); }
+      if (newStripeSecret.trim()) { setS((p) => ({ ...p, stripe_secret_key_set: true })); setNewStripeSecret(''); }
+      if (newStripeWebhook.trim()) { setS((p) => ({ ...p, stripe_webhook_secret_set: true })); setNewStripeWebhook(''); }
       toast.success('Settings saved');
     } catch {
       toast.error('Failed to save settings');
@@ -214,6 +227,28 @@ export default function AdminSettings() {
             </Field>
             <Field id="fb_dataset_id" label="Dataset ID" hint="Required for Conversions API. Usually the same as your Pixel ID.">
               <Input id="fb_dataset_id" value={s.fb_dataset_id} onChange={set('fb_dataset_id')} placeholder="123456789012345" className="border-slate-300" />
+            </Field>
+          </SectionCard>
+
+          {/* ── Stripe ── */}
+          <SectionCard
+            title="Stripe Payments"
+            status={{ set: s.stripe_secret_key_set, label: ['Connected', 'Not configured'] }}
+          >
+            <Field id="stripe_secret" label={s.stripe_secret_key_set ? 'Replace Secret Key' : 'Secret Key'} hint={<>Starts with <code className="bg-slate-100 px-1 rounded">sk_live_</code> or <code className="bg-slate-100 px-1 rounded">sk_test_</code>. Found in your <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noreferrer" className="text-red-600 hover:underline">Stripe dashboard</a>.</>}>
+              <div className="relative">
+                <Input id="stripe_secret" type={showStripeSecret ? 'text' : 'password'} value={newStripeSecret} onChange={e => setNewStripeSecret(e.target.value)} placeholder={s.stripe_secret_key_set ? 'Enter new key to replace' : 'sk_live_...'} className="border-slate-300 pr-10" />
+                <button type="button" onClick={() => setShowStripeSecret(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">{showStripeSecret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</button>
+              </div>
+            </Field>
+            <Field id="stripe_pk" label="Publishable Key" hint="Starts with pk_live_ or pk_test_. Safe to expose publicly.">
+              <Input id="stripe_pk" value={s.stripe_publishable_key} onChange={set('stripe_publishable_key')} placeholder="pk_live_..." className="border-slate-300" />
+            </Field>
+            <Field id="stripe_webhook" label={s.stripe_webhook_secret_set ? 'Replace Webhook Secret' : 'Webhook Secret'} hint={<>Add a webhook endpoint pointing to <code className="bg-slate-100 px-1 rounded">/api/webhooks/stripe</code> in your Stripe dashboard. Listen for <code className="bg-slate-100 px-1 rounded">checkout.session.completed</code>.</>}>
+              <div className="relative">
+                <Input id="stripe_webhook" type={showStripeWebhook ? 'text' : 'password'} value={newStripeWebhook} onChange={e => setNewStripeWebhook(e.target.value)} placeholder={s.stripe_webhook_secret_set ? 'Enter new secret to replace' : 'whsec_...'} className="border-slate-300 pr-10" />
+                <button type="button" onClick={() => setShowStripeWebhook(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">{showStripeWebhook ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</button>
+              </div>
             </Field>
           </SectionCard>
 
