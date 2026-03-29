@@ -40,7 +40,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     const fee = Math.round(subtotal * CARD_FEE_RATE * 100) / 100;
     const total = Math.round((subtotal + tax + fee) * 100) / 100;
 
-    const stripe = new Stripe(stripeKey, { apiVersion: '2024-04-10' });
+    const stripe = new Stripe(stripeKey, { apiVersion: '2023-10-16' });
     const origin = req.headers.get('origin') ?? 'https://roofscanada.ca';
 
     const session = await stripe.checkout.sessions.create({
