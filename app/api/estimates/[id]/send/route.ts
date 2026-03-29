@@ -60,7 +60,7 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
       subtotal: Number(est.subtotal),
       total: Number(est.subtotal),
       terms: terms_and_conditions ?? undefined,
-    })
+    }) as any
   );
 
   const itemRows = items.map(i =>

@@ -69,7 +69,7 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
       total,
       paymentMethod: inv.payment_method ?? undefined,
       terms: terms_and_conditions ?? undefined,
-    })
+    }) as any
   );
 
   const items: { description: string; qty: number; unit_price: number }[] = inv.items;
