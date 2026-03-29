@@ -34,6 +34,12 @@ export async function GET() {
     stripe_secret_key_set: !!settings.stripe_secret_key,
     stripe_publishable_key: settings.stripe_publishable_key ?? '',
     stripe_webhook_secret_set: !!settings.stripe_webhook_secret,
+    logo_url: settings.logo_url ?? '',
+    company_name: settings.company_name ?? 'Roofs Canada',
+    company_address: settings.company_address ?? '',
+    company_phone: settings.company_phone ?? '',
+    company_email: settings.company_email ?? '',
+    terms_and_conditions: settings.terms_and_conditions ?? '',
   });
 }
 
@@ -50,6 +56,8 @@ export async function POST(req: NextRequest) {
     'gtag_id',
     'fb_pixel_id', 'fb_access_token', 'fb_dataset_id',
     'stripe_secret_key', 'stripe_publishable_key', 'stripe_webhook_secret',
+    'company_name', 'company_address', 'company_phone', 'company_email',
+    'terms_and_conditions',
   ];
   for (const key of allowed) {
     if (typeof body[key] === 'string' && body[key].trim() !== '') {
