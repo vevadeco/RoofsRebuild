@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,8 +14,10 @@ type LineItem = { description: string; qty: number; unit_price: number };
 
 export default function NewEstimatePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const preselectedLeadId = searchParams.get('lead_id') ?? '';
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [leadId, setLeadId] = useState('');
+  const [leadId, setLeadId] = useState(preselectedLeadId);
   const [items, setItems] = useState<LineItem[]>([{ description: '', qty: 1, unit_price: 0 }]);
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
