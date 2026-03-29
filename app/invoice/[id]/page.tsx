@@ -23,12 +23,24 @@ export default function InvoicePayPage({ params }: { params: { id: string } }) {
   const [inv, setInv] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState<'cash' | 'card' | null>(null);
+  const [logoUrl, setLogoUrl] = useState('');
+  const [companyName, setCompanyName] = useState('Roofs Canada');
 
   useEffect(() => {
     fetch(`/api/invoices/${params.id}`).then(r => r.json()).then(setInv)
       .catch(() => toast.error('Failed to load invoice'))
       .finally(() => setLoading(false));
   }, [params.id]);
+
+  useEffect(() => {
+    fetch('/api/public/branding')
+      .then(r => r.json())
+      .then(d => {
+        if (d.logo_url) setLogoUrl(d.logo_url);
+        if (d.company_name) setCompanyName(d.company_name);
+      })
+      .catch(() => {});
+  }, []);
 
   const handlePay = async (method: 'cash' | 'card') => {
     setPaying(method);
@@ -76,8 +88,10 @@ export default function InvoicePayPage({ params }: { params: { id: string } }) {
       <div className="max-w-xl mx-auto">
         {/* Logo */}
         <div className="flex items-center gap-2 mb-8">
-          <Home className="text-red-600 h-6 w-6" />
-          <span className="text-xl font-bold text-slate-900 tracking-tight">Roofs Canada</span>
+          {logoUrl
+            ? <img src={logoUrl} alt={companyName} className="h-8 object-contain" />
+            : <><Home className="text-red-600 h-6 w-6" /><span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span></>
+          }
         </div>
 
         {isPaid ? (

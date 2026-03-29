@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, Menu, X } from 'lucide-react';
 
 const links = [
@@ -11,6 +11,18 @@ const links = [
 
 export function PublicNavbar() {
   const [open, setOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
+  const [companyName, setCompanyName] = useState('Roofs Canada');
+
+  useEffect(() => {
+    fetch('/api/public/branding')
+      .then(r => r.json())
+      .then(d => {
+        if (d.logo_url) setLogoUrl(d.logo_url);
+        if (d.company_name) setCompanyName(d.company_name);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200">
@@ -18,8 +30,10 @@ export function PublicNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#hero" className="flex items-center gap-2">
-            <Home className="text-red-600 h-6 w-6" />
-            <span className="text-xl font-bold text-slate-900 tracking-tight">Roofs Canada</span>
+            {logoUrl
+              ? <img src={logoUrl} alt={companyName} className="h-8 object-contain" />
+              : <><Home className="text-red-600 h-6 w-6" /><span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span></>
+            }
           </a>
 
           {/* Desktop links */}

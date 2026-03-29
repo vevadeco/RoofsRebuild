@@ -1,29 +1,33 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle2, AlertCircle, Upload } from 'lucide-react';
 
 type Settings = {
-  // Email
   resend_api_key_set: boolean;
   sender_email: string;
   notification_email: string;
-  // SEO
   seo_title: string;
   seo_description: string;
   seo_keywords: string;
   seo_og_image: string;
-  // Analytics
   gtag_id: string;
-  // Facebook
   fb_pixel_id: string;
+  fb_access_token_set: boolean;
+  fb_dataset_id: string;
   stripe_secret_key_set: boolean;
   stripe_publishable_key: string;
   stripe_webhook_secret_set: boolean;
+  logo_url: string;
+  company_name: string;
+  company_address: string;
+  company_phone: string;
+  company_email: string;
+  terms_and_conditions: string;
 };
 
 const defaultSettings: Settings = {
@@ -41,6 +45,12 @@ const defaultSettings: Settings = {
   stripe_secret_key_set: false,
   stripe_publishable_key: '',
   stripe_webhook_secret_set: false,
+  logo_url: '',
+  company_name: '',
+  company_address: '',
+  company_phone: '',
+  company_email: '',
+  terms_and_conditions: '',
 };
 
 function SectionCard({ title, status, children }: {
@@ -92,6 +102,8 @@ export default function AdminSettings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch('/api/settings')
@@ -103,6 +115,27 @@ export default function AdminSettings() {
 
   const set = (key: keyof Settings) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setS((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const handleLogoUpload = async (file: File) => {
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('File must be under 2MB');
+      return;
+    }
+    setUploadingLogo(true);
+    try {
+      const fd = new FormData();
+      fd.append('logo', file);
+      const res = await fetch('/api/settings/logo', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail ?? 'Upload failed');
+      setS(prev => ({ ...prev, logo_url: data.logo_url }));
+      toast.success('Logo uploaded');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,6 +151,11 @@ export default function AdminSettings() {
         gtag_id: s.gtag_id,
         fb_pixel_id: s.fb_pixel_id,
         fb_dataset_id: s.fb_dataset_id,
+        company_name: s.company_name,
+        company_address: s.company_address,
+        company_phone: s.company_phone,
+        company_email: s.company_email,
+        terms_and_conditions: s.terms_and_conditions,
       };
       if (newResendKey.trim()) body.resend_api_key = newResendKey.trim();
       if (newFbToken.trim()) body.fb_access_token = newFbToken.trim();
@@ -171,10 +209,70 @@ export default function AdminSettings() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2">Settings</h1>
-          <p className="text-slate-600">Manage integrations, SEO, and analytics.</p>
+          <p className="text-slate-600">Manage branding, integrations, SEO, and analytics.</p>
         </div>
 
         <form onSubmit={handleSave} className="space-y-6">
+
+          {/* ── Branding ── */}
+          <SectionCard title="Branding">
+            <Field id="logo_upload" label="Logo" hint="PNG, JPG, SVG, or WebP. Max 2MB.">
+              <div className="space-y-3">
+                {s.logo_url && (
+                  <img src={s.logo_url} alt="Current logo" style={{ maxHeight: 60 }} className="object-contain border border-slate-200 rounded p-2 bg-white" />
+                )}
+                <div className="flex items-center gap-3">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                    className="hidden"
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (file) handleLogoUpload(file);
+                      e.target.value = '';
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={uploadingLogo}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-slate-300 text-slate-700 gap-2"
+                  >
+                    <Upload className="h-4 w-4" />
+                    {uploadingLogo ? 'Uploading...' : s.logo_url ? 'Replace Logo' : 'Upload Logo'}
+                  </Button>
+                </div>
+              </div>
+            </Field>
+            <Field id="company_name" label="Company Name">
+              <Input id="company_name" value={s.company_name} onChange={set('company_name')} placeholder="Roofs Canada" className="border-slate-300" />
+            </Field>
+            <Field id="company_address" label="Company Address" hint="Shown on PDF estimates and invoices.">
+              <Input id="company_address" value={s.company_address} onChange={set('company_address')} placeholder="123 Main St, Toronto, ON M1A 1A1" className="border-slate-300" />
+            </Field>
+            <Field id="company_phone" label="Company Phone">
+              <Input id="company_phone" value={s.company_phone} onChange={set('company_phone')} placeholder="(416) 555-0100" className="border-slate-300" />
+            </Field>
+            <Field id="company_email" label="Company Email">
+              <Input id="company_email" type="email" value={s.company_email} onChange={set('company_email')} placeholder="info@roofscanada.ca" className="border-slate-300" />
+            </Field>
+          </SectionCard>
+
+          {/* ── Terms & Conditions ── */}
+          <SectionCard title="Terms & Conditions">
+            <Field id="terms_and_conditions" label="Terms & Conditions" hint="Appended to all estimate and invoice PDFs.">
+              <Textarea
+                id="terms_and_conditions"
+                value={s.terms_and_conditions}
+                onChange={set('terms_and_conditions')}
+                rows={6}
+                placeholder="Enter your terms and conditions here..."
+                className="border-slate-300 resize-none"
+              />
+            </Field>
+          </SectionCard>
 
           {/* ── SEO ── */}
           <SectionCard title="SEO">

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Home, Settings, LayoutDashboard, Menu, X, LogOut, FileText, Receipt } from 'lucide-react';
@@ -9,6 +9,18 @@ export function AdminNavbar() {
   const { logout } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
+  const [companyName, setCompanyName] = useState('Roofs Canada');
+
+  useEffect(() => {
+    fetch('/api/public/branding')
+      .then(r => r.json())
+      .then(d => {
+        if (d.logo_url) setLogoUrl(d.logo_url);
+        if (d.company_name) setCompanyName(d.company_name);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -22,8 +34,10 @@ export function AdminNavbar() {
         <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Home className="text-red-600 h-5 w-5" />
-            <span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">Roofs Canada</span>
+            {logoUrl
+              ? <img src={logoUrl} alt={companyName} className="h-8 object-contain" />
+              : <><Home className="text-red-600 h-5 w-5" /><span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">{companyName}</span></>
+            }
             <span className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400 border border-slate-200 rounded px-1.5 py-0.5 hidden sm:inline">Admin</span>
           </Link>
 
