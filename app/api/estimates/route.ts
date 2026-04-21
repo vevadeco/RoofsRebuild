@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   await initDb();
   const { lead_id, items, notes } = await req.json();
-  if (!lead_id || !Array.isArray(items)) {
+  if (!lead_id || !items) {
     return NextResponse.json({ detail: 'lead_id and items are required' }, { status: 400 });
   }
 
@@ -37,7 +37,9 @@ export async function POST(req: NextRequest) {
   const { rows: count } = await pool.query('SELECT COUNT(*) FROM estimates');
   const number = `EST-${String(Number(count[0].count) + 1).padStart(4, '0')}`;
 
-  const subtotal = items.reduce((sum: number, item: { qty: number; unit_price: number }) =>
+  // Calculate subtotal from lineItems (new structured format) or items array (legacy)
+  const lineItems = items.lineItems ?? (Array.isArray(items) ? items : []);
+  const subtotal = lineItems.reduce((sum: number, item: { qty: number; unit_price: number }) =>
     sum + item.qty * item.unit_price, 0);
 
   const id = randomUUID();

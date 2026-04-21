@@ -29,9 +29,12 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   const { rows: existing } = await pool.query('SELECT * FROM estimates WHERE id = $1', [params.id]);
   if (!existing.length) return NextResponse.json({ detail: 'Not found' }, { status: 404 });
 
-  const subtotal = items
-    ? items.reduce((s: number, i: { qty: number; unit_price: number }) => s + i.qty * i.unit_price, 0)
-    : existing[0].subtotal;
+  // Calculate subtotal from lineItems (new structured format) or items array (legacy)
+  let subtotal = existing[0].subtotal;
+  if (items) {
+    const lineItems = items.lineItems ?? (Array.isArray(items) ? items : []);
+    subtotal = lineItems.reduce((s: number, i: { qty: number; unit_price: number }) => s + i.qty * i.unit_price, 0);
+  }
 
   const { rows } = await pool.query(
     `UPDATE estimates SET
