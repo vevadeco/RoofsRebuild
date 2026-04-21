@@ -26,6 +26,7 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
   const [
     apiKey, senderEmail,
     logo_url, company_name, company_address, company_phone, company_email, terms_and_conditions,
+    gst_hst_number, company_website,
   ] = await Promise.all([
     getSetting('resend_api_key'),
     getSetting('sender_email'),
@@ -35,6 +36,8 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
     getSetting('company_phone'),
     getSetting('company_email'),
     getSetting('terms_and_conditions'),
+    getSetting('gst_hst_number'),
+    getSetting('company_website'),
   ]);
 
   const resolvedKey = apiKey ?? process.env.RESEND_API_KEY;
@@ -48,6 +51,11 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
   const transactionFee = Number(inv.transaction_fee);
   const total = Number(inv.total);
 
+  // Extract line items — handle both proposal format and legacy array
+  const rawItems = inv.items;
+  const lineItems: { description: string; qty: number; unit_price: number }[] =
+    rawItems?.lineItems ?? (Array.isArray(rawItems) ? rawItems : []);
+
   const pdfBuffer = await renderToBuffer(
     React.createElement(PdfDocument, {
       type: 'INVOICE',
@@ -58,10 +66,12 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
       companyAddress: company_address ?? undefined,
       companyPhone: company_phone ?? undefined,
       companyEmail: company_email ?? undefined,
+      companyWebsite: company_website ?? undefined,
+      gstHstNumber: gst_hst_number ?? undefined,
       clientName: inv.lead_name,
       clientEmail: inv.lead_email,
       clientPhone: inv.lead_phone,
-      items: inv.items,
+      items: lineItems,
       notes: inv.notes,
       subtotal,
       tax: tax > 0 ? tax : undefined,
@@ -72,7 +82,7 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
     }) as any
   );
 
-  const items: { description: string; qty: number; unit_price: number }[] = inv.items;
+  const items = lineItems;
   const itemRows = items.map(i =>
     `<tr>
       <td style="padding:8px 12px;border-bottom:1px solid #F1F5F9">${i.description}</td>

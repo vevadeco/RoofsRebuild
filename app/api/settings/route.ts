@@ -40,6 +40,8 @@ export async function GET() {
     company_phone: settings.company_phone ?? '',
     company_email: settings.company_email ?? '',
     terms_and_conditions: settings.terms_and_conditions ?? '',
+    gst_hst_number: settings.gst_hst_number ?? '',
+    company_website: settings.company_website ?? '',
   });
 }
 
@@ -57,7 +59,7 @@ export async function POST(req: NextRequest) {
     'fb_pixel_id', 'fb_access_token', 'fb_dataset_id',
     'stripe_secret_key', 'stripe_publishable_key', 'stripe_webhook_secret',
     'company_name', 'company_address', 'company_phone', 'company_email',
-    'terms_and_conditions',
+    'terms_and_conditions', 'gst_hst_number', 'company_website',
   ];
   for (const key of allowed) {
     if (typeof body[key] === 'string' && body[key].trim() !== '') {

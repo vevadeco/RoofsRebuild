@@ -76,6 +76,8 @@ export type PdfDocProps = {
   companyAddress?: string;
   companyPhone?: string;
   companyEmail?: string;
+  companyWebsite?: string;
+  gstHstNumber?: string;
   clientName: string;
   clientEmail: string;
   clientPhone?: string;
@@ -89,127 +91,138 @@ export type PdfDocProps = {
   terms?: string;
 };
 
+const inv = StyleSheet.create({
+  topRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 0 },
+  companyBox: { border: `1px solid ${c.dark}`, padding: 12, width: 180 },
+  companyName: { fontSize: 11, fontWeight: 700, color: c.dark, textAlign: 'center', marginBottom: 4 },
+  companyDetail: { fontSize: 8, color: c.dark, textAlign: 'center', lineHeight: 1.6 },
+  logoCenter: { alignItems: 'center', justifyContent: 'center', flex: 1, paddingHorizontal: 20 },
+  logoBig: { width: 180, height: 100, objectFit: 'contain' },
+  logoTextBig: { fontSize: 28, fontWeight: 700, color: c.red, textAlign: 'center' },
+  websiteText: { fontSize: 8, color: c.mid, textAlign: 'center', marginTop: 4 },
+  rightCol: { width: 200 },
+  metaTable: { border: `1px solid ${c.dark}`, marginBottom: 10 },
+  metaRow: { flexDirection: 'row', borderBottom: `1px solid ${c.dark}` },
+  metaRowLast: { flexDirection: 'row' },
+  metaLabel: { fontSize: 9, fontWeight: 700, color: c.dark, padding: '4 8', width: 80, borderRight: `1px solid ${c.dark}` },
+  metaValue: { fontSize: 9, color: c.dark, padding: '4 8', flex: 1, textAlign: 'center' },
+  invoiceToBox: { border: `1px solid ${c.dark}` },
+  invoiceToLabel: { fontSize: 9, fontWeight: 700, color: c.dark, padding: '4 8', borderBottom: `1px solid ${c.dark}` },
+  invoiceToValue: { fontSize: 9, color: c.dark, padding: '8 8', minHeight: 50 },
+  descTable: { border: `1px solid ${c.dark}`, marginTop: 20 },
+  descHeader: { flexDirection: 'row', borderBottom: `1px solid ${c.dark}` },
+  descHeaderCell: { fontSize: 10, fontWeight: 700, color: c.dark, padding: '6 10', textAlign: 'center' },
+  descRow: { flexDirection: 'row', borderBottom: `0.5px solid ${c.border}`, minHeight: 20 },
+  descCell: { fontSize: 9, color: c.dark, padding: '4 10' },
+  amountCell: { fontSize: 9, color: c.dark, padding: '4 10', textAlign: 'right' },
+  balanceRow: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 16 },
+  balanceBox: { border: `1px solid ${c.dark}`, flexDirection: 'row' },
+  balanceLabel: { fontSize: 12, fontWeight: 700, color: c.dark, padding: '6 12', borderRight: `1px solid ${c.dark}` },
+  balanceValue: { fontSize: 12, color: c.dark, padding: '6 12', minWidth: 80, textAlign: 'right' },
+  gstRow: { position: 'absolute', bottom: 40, left: 40 },
+  gstText: { fontSize: 8, color: c.dark },
+});
+
 export function PdfDocument({
   type, number, date, logoUrl, companyName, companyAddress, companyPhone, companyEmail,
+  companyWebsite, gstHstNumber,
   clientName, clientEmail, clientPhone, items, notes, subtotal, tax, transactionFee, total,
   paymentMethod, terms,
 }: PdfDocProps) {
+  // Build description rows — combine line items with tax/fee rows for card payments
+  const descRows: { description: string; amount: string }[] = items.map(i => ({
+    description: `${i.description}${i.qty > 1 ? ` (x${i.qty})` : ''}`,
+    amount: `$${(i.qty * i.unit_price).toFixed(2)}`,
+  }));
+  if (tax != null && tax > 0) descRows.push({ description: 'HST (13%)', amount: `$${tax.toFixed(2)}` });
+  if (transactionFee != null && transactionFee > 0) descRows.push({ description: 'Card Processing Fee (3%)', amount: `$${transactionFee.toFixed(2)}` });
+
+  // Pad to at least 12 rows for visual consistency
+  while (descRows.length < 12) descRows.push({ description: '', amount: '' });
+
   return (
     <Document>
       <Page size="LETTER" style={s.page}>
-        {/* Header */}
-        <View style={s.header}>
-          <View>
+        {/* Top row: company info | logo | date+invoice# */}
+        <View style={inv.topRow}>
+          {/* Company info box */}
+          <View style={inv.companyBox}>
+            <Text style={inv.companyName}>{companyName}</Text>
+            {companyAddress && <Text style={inv.companyDetail}>{companyAddress}</Text>}
+            {companyEmail && <Text style={inv.companyDetail}>{companyEmail}</Text>}
+            {companyPhone && <Text style={inv.companyDetail}>{companyPhone}</Text>}
+            {companyWebsite && <Text style={inv.companyDetail}>{companyWebsite}</Text>}
+          </View>
+
+          {/* Center logo */}
+          <View style={inv.logoCenter}>
             {logoUrl
-              ? <Image src={logoUrl} style={s.logo} />
-              : <Text style={s.logoText}>{companyName}</Text>
+              ? <Image src={logoUrl} style={inv.logoBig} />
+              : <Text style={inv.logoTextBig}>{companyName}</Text>
             }
-            {companyAddress && <Text style={{ ...s.colValue, marginTop: 6, color: c.mid }}>{companyAddress}</Text>}
-            {companyPhone && <Text style={{ ...s.colValue, color: c.mid }}>{companyPhone}</Text>}
-            {companyEmail && <Text style={{ ...s.colValue, color: c.mid }}>{companyEmail}</Text>}
+            {companyWebsite && <Text style={inv.websiteText}>{companyWebsite}</Text>}
           </View>
-          <View style={s.docMeta}>
-            <Text style={s.docType}>{type}</Text>
-            <Text style={s.docNumber}>{number}</Text>
-            <Text style={s.docDate}>{date}</Text>
-          </View>
-        </View>
 
-        <View style={s.divider} />
-
-        {/* Bill To */}
-        <View style={s.twoCol}>
-          <View>
-            <Text style={s.colLabel}>Bill To</Text>
-            <Text style={s.colValue}>{clientName}</Text>
-            <Text style={s.colValue}>{clientEmail}</Text>
-            {clientPhone && <Text style={s.colValue}>{clientPhone}</Text>}
-          </View>
-          {paymentMethod && (
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={s.colLabel}>Payment Method</Text>
-              <Text style={{ ...s.colValue, textTransform: 'capitalize' }}>{paymentMethod}</Text>
+          {/* Right column: date/invoice# + Invoice To */}
+          <View style={inv.rightCol}>
+            <View style={inv.metaTable}>
+              <View style={inv.metaRow}>
+                <Text style={inv.metaLabel}>Date</Text>
+                <Text style={inv.metaLabel}>Invoice #</Text>
+              </View>
+              <View style={inv.metaRowLast}>
+                <Text style={inv.metaValue}>{date}</Text>
+                <Text style={inv.metaValue}>{number}</Text>
+              </View>
             </View>
-          )}
+
+            <View style={inv.invoiceToBox}>
+              <Text style={inv.invoiceToLabel}>Invoice To</Text>
+              <View style={inv.invoiceToValue}>
+                <Text style={{ fontSize: 9, color: c.dark }}>{clientName}</Text>
+                <Text style={{ fontSize: 8, color: c.mid }}>{clientEmail}</Text>
+                {clientPhone && <Text style={{ fontSize: 8, color: c.mid }}>{clientPhone}</Text>}
+              </View>
+            </View>
+          </View>
         </View>
 
-        {/* Table */}
-        <View style={s.tableHeader}>
-          <Text style={{ ...s.thText, ...s.colDesc }}>Description</Text>
-          <Text style={{ ...s.thText, ...s.colQty }}>Qty</Text>
-          <Text style={{ ...s.thText, ...s.colPrice }}>Unit Price</Text>
-          <Text style={{ ...s.thText, ...s.colTotal }}>Total</Text>
-        </View>
-        {items.map((item, i) => (
-          <View key={i} style={s.tableRow}>
-            <Text style={s.colDesc}>{item.description}</Text>
-            <Text style={s.colQty}>{item.qty}</Text>
-            <Text style={s.colPrice}>${Number(item.unit_price).toFixed(2)}</Text>
-            <Text style={s.colTotal}>${(item.qty * item.unit_price).toFixed(2)}</Text>
+        {/* Description / Amount table */}
+        <View style={inv.descTable}>
+          <View style={inv.descHeader}>
+            <Text style={{ ...inv.descHeaderCell, flex: 4, textAlign: 'center' }}>Description</Text>
+            <Text style={{ ...inv.descHeaderCell, width: 100, borderLeft: `1px solid ${c.dark}` }}>Amount</Text>
           </View>
-        ))}
+          {descRows.map((row, i) => (
+            <View key={i} style={inv.descRow}>
+              <Text style={{ ...inv.descCell, flex: 4 }}>{row.description}</Text>
+              <Text style={{ ...inv.amountCell, width: 100, borderLeft: `0.5px solid ${c.border}` }}>{row.amount}</Text>
+            </View>
+          ))}
+        </View>
 
-        {/* Totals */}
-        <View style={s.subtotalRow}>
-          <Text style={s.subtotalLabel}>Subtotal</Text>
-          <Text style={s.subtotalValue}>${subtotal.toFixed(2)}</Text>
-        </View>
-        {tax != null && tax > 0 && (
-          <View style={s.taxRow}>
-            <Text style={s.taxLabel}>HST (13%)</Text>
-            <Text style={s.taxValue}>${tax.toFixed(2)}</Text>
+        {/* Balance Due */}
+        <View style={inv.balanceRow}>
+          <View style={inv.balanceBox}>
+            <Text style={inv.balanceLabel}>Balance Due</Text>
+            <Text style={inv.balanceValue}>${total.toFixed(2)}</Text>
           </View>
-        )}
-        {transactionFee != null && transactionFee > 0 && (
-          <View style={s.taxRow}>
-            <Text style={s.taxLabel}>Card Fee (3%)</Text>
-            <Text style={s.taxValue}>${transactionFee.toFixed(2)}</Text>
-          </View>
-        )}
-        <View style={s.totalRow}>
-          <Text style={s.totalLabel}>Total</Text>
-          <Text style={s.totalValue}>${total.toFixed(2)}</Text>
         </View>
 
         {/* Notes */}
         {notes && (
-          <View style={s.notesBox}>
+          <View style={{ ...s.notesBox, marginTop: 16 }}>
             <Text style={s.notesLabel}>Notes</Text>
             <Text style={s.notesText}>{notes}</Text>
           </View>
         )}
 
-        {/* Signature */}
-        <View style={s.sigSection}>
-          <View style={s.sigBox}>
-            <Text style={s.sigLabel}>
-              {type === 'ESTIMATE'
-                ? 'By signing below, I accept this estimate and authorize Roofs Canada to proceed with the described work.'
-                : 'By signing below, I confirm receipt of this invoice and agree to the payment terms.'}
-            </Text>
-            <View style={s.sigLine} />
-            <Text style={s.sigSubLabel}>Client Signature</Text>
-          </View>
-          <View style={s.sigBox}>
-            <Text style={s.sigLabel}> </Text>
-            <View style={s.sigLine} />
-            <Text style={s.sigSubLabel}>Date</Text>
-          </View>
-        </View>
-
-        {/* Terms */}
-        {terms && (
-          <View style={s.termsBox}>
-            <Text style={s.termsLabel}>Terms & Conditions</Text>
-            <Text style={s.termsText}>{terms}</Text>
+        {/* GST/HST Number */}
+        {gstHstNumber && (
+          <View style={inv.gstRow}>
+            <Text style={inv.gstText}>GST/HST No.        {gstHstNumber}</Text>
           </View>
         )}
-
-        {/* Footer */}
-        <View style={s.footer} fixed>
-          <Text style={s.footerText}>{companyName} — {number}</Text>
-          <Text style={s.footerText} render={({ pageNumber, totalPages }: { pageNumber: number; totalPages: number }) => `Page ${pageNumber} of ${totalPages}`} />
-        </View>
       </Page>
     </Document>
   );
