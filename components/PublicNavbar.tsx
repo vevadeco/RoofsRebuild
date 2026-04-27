@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import Image from 'next/image';
 
 const links = [
   { label: 'Services', href: '#services' },
@@ -13,6 +12,7 @@ const links = [
 export function PublicNavbar() {
   const [open, setOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState('');
+  const [logoText, setLogoText] = useState('Roofs Canada');
   const [companyName, setCompanyName] = useState('Roofs Canada');
 
   useEffect(() => {
@@ -20,7 +20,11 @@ export function PublicNavbar() {
       .then(r => r.json())
       .then(d => {
         if (d.logo_url) setLogoUrl(d.logo_url);
-        if (d.company_name) setCompanyName(d.company_name);
+        if (d.logo_text) setLogoText(d.logo_text);
+        if (d.company_name) {
+          setCompanyName(d.company_name);
+          if (!d.logo_text) setLogoText(d.company_name);
+        }
       })
       .catch(() => {});
   }, []);
@@ -31,8 +35,8 @@ export function PublicNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#hero" className="flex items-center gap-2">
-            <Image src="/logo.svg" alt={companyName} width={32} height={32} className="h-8 w-8" />
-            <span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span>
+            <img src={logoUrl || '/logo.svg'} alt={companyName} className="h-8 w-8 object-contain" />
+            <span className="text-xl font-bold text-slate-900 tracking-tight">{logoText}</span>
           </a>
 
           {/* Desktop links */}

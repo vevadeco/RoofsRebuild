@@ -35,6 +35,7 @@ export async function GET() {
     stripe_publishable_key: settings.stripe_publishable_key ?? '',
     stripe_webhook_secret_set: !!settings.stripe_webhook_secret,
     logo_url: settings.logo_url ?? '',
+    logo_text: settings.logo_text ?? '',
     company_name: settings.company_name ?? 'Roofs Canada',
     company_address: settings.company_address ?? '',
     company_phone: settings.company_phone ?? '',
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
     'gtag_id',
     'fb_pixel_id', 'fb_access_token', 'fb_dataset_id',
     'stripe_secret_key', 'stripe_publishable_key', 'stripe_webhook_secret',
+    'logo_text',
     'company_name', 'company_address', 'company_phone', 'company_email',
     'terms_and_conditions', 'gst_hst_number', 'company_website',
   ];

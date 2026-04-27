@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Settings, LayoutDashboard, Menu, X, LogOut, FileText, Receipt } from 'lucide-react';
-import Image from 'next/image';
 import { useAuth } from '@/lib/useAuth';
 
 export function AdminNavbar() {
@@ -11,6 +10,7 @@ export function AdminNavbar() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState('');
+  const [logoText, setLogoText] = useState('Roofs Canada');
   const [companyName, setCompanyName] = useState('Roofs Canada');
 
   useEffect(() => {
@@ -18,7 +18,11 @@ export function AdminNavbar() {
       .then(r => r.json())
       .then(d => {
         if (d.logo_url) setLogoUrl(d.logo_url);
-        if (d.company_name) setCompanyName(d.company_name);
+        if (d.logo_text) setLogoText(d.logo_text);
+        if (d.company_name) {
+          setCompanyName(d.company_name);
+          if (!d.logo_text) setLogoText(d.company_name);
+        }
       })
       .catch(() => {});
   }, []);
@@ -35,8 +39,8 @@ export function AdminNavbar() {
         <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.svg" alt={companyName} width={28} height={28} className="h-7 w-7" />
-            <span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">{companyName}</span>
+            <img src={logoUrl || '/logo.svg'} alt={companyName} className="h-7 w-7 object-contain" />
+            <span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">{logoText}</span>
             <span className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400 border border-slate-200 rounded px-1.5 py-0.5 hidden sm:inline">Admin</span>
           </Link>
 

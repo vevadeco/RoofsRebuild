@@ -23,6 +23,7 @@ type Settings = {
   stripe_publishable_key: string;
   stripe_webhook_secret_set: boolean;
   logo_url: string;
+  logo_text: string;
   company_name: string;
   company_address: string;
   company_phone: string;
@@ -46,6 +47,7 @@ const defaultSettings: Settings = {
   stripe_publishable_key: '',
   stripe_webhook_secret_set: false,
   logo_url: '',
+  logo_text: '',
   company_name: '',
   company_address: '',
   company_phone: '',
@@ -152,6 +154,7 @@ export default function AdminSettings() {
         fb_pixel_id: s.fb_pixel_id,
         fb_dataset_id: s.fb_dataset_id,
         company_name: s.company_name,
+        logo_text: s.logo_text,
         company_address: s.company_address,
         company_phone: s.company_phone,
         company_email: s.company_email,
@@ -245,6 +248,9 @@ export default function AdminSettings() {
                   </Button>
                 </div>
               </div>
+            </Field>
+            <Field id="logo_text" label="Logo Text" hint="Text displayed next to the logo. Defaults to company name if empty.">
+              <Input id="logo_text" value={s.logo_text} onChange={set('logo_text')} placeholder="Roofs Canada" className="border-slate-300" />
             </Field>
             <Field id="company_name" label="Company Name">
               <Input id="company_name" value={s.company_name} onChange={set('company_name')} placeholder="Roofs Canada" className="border-slate-300" />

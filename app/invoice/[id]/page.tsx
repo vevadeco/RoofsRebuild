@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CreditCard, Banknote, CheckCircle2, Loader2 } from 'lucide-react';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -25,6 +24,7 @@ export default function InvoicePayPage({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState<'cash' | 'card' | null>(null);
   const [logoUrl, setLogoUrl] = useState('');
+  const [logoText, setLogoText] = useState('Roofs Canada');
   const [companyName, setCompanyName] = useState('Roofs Canada');
 
   useEffect(() => {
@@ -38,7 +38,11 @@ export default function InvoicePayPage({ params }: { params: { id: string } }) {
       .then(r => r.json())
       .then(d => {
         if (d.logo_url) setLogoUrl(d.logo_url);
-        if (d.company_name) setCompanyName(d.company_name);
+        if (d.logo_text) setLogoText(d.logo_text);
+        if (d.company_name) {
+          setCompanyName(d.company_name);
+          if (!d.logo_text) setLogoText(d.company_name);
+        }
       })
       .catch(() => {});
   }, []);
@@ -89,8 +93,8 @@ export default function InvoicePayPage({ params }: { params: { id: string } }) {
       <div className="max-w-xl mx-auto">
         {/* Logo */}
         <div className="flex items-center gap-2 mb-8">
-          <Image src="/logo.svg" alt={companyName} width={32} height={32} className="h-8 w-8" />
-          <span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span>
+          <img src={logoUrl || '/logo.svg'} alt={companyName} className="h-8 w-8 object-contain" />
+          <span className="text-xl font-bold text-slate-900 tracking-tight">{logoText}</span>
         </div>
 
         {isPaid ? (
