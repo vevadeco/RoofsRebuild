@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Home, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from './ui/button';
 import { useAuth } from '@/lib/useAuth';
 
@@ -20,7 +21,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <Home className="text-red-600 h-6 w-6" />
+            <Image src="/logo.svg" alt="Roofs Canada" width={32} height={32} className="h-8 w-8" />
             <span className="text-xl font-bold text-slate-900 tracking-tight">Roofs Canada</span>
           </Link>
           <div className="flex items-center gap-6">

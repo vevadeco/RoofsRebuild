@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Home, Settings, LayoutDashboard, Menu, X, LogOut, FileText, Receipt } from 'lucide-react';
+import { Settings, LayoutDashboard, Menu, X, LogOut, FileText, Receipt } from 'lucide-react';
+import Image from 'next/image';
 import { useAuth } from '@/lib/useAuth';
 
 export function AdminNavbar() {
@@ -34,10 +35,8 @@ export function AdminNavbar() {
         <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            {logoUrl
-              ? <img src={logoUrl} alt={companyName} className="h-8 object-contain" />
-              : <><Home className="text-red-600 h-5 w-5" /><span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">{companyName}</span></>
-            }
+            <Image src="/logo.svg" alt={companyName} width={28} height={28} className="h-7 w-7" />
+            <span className="text-base md:text-lg font-bold text-slate-900 tracking-tight">{companyName}</span>
             <span className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400 border border-slate-200 rounded px-1.5 py-0.5 hidden sm:inline">Admin</span>
           </Link>
 

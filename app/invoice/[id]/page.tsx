@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Home, CreditCard, Banknote, CheckCircle2, Loader2 } from 'lucide-react';
+import { CreditCard, Banknote, CheckCircle2, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -88,10 +89,8 @@ export default function InvoicePayPage({ params }: { params: { id: string } }) {
       <div className="max-w-xl mx-auto">
         {/* Logo */}
         <div className="flex items-center gap-2 mb-8">
-          {logoUrl
-            ? <img src={logoUrl} alt={companyName} className="h-8 object-contain" />
-            : <><Home className="text-red-600 h-6 w-6" /><span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span></>
-          }
+          <Image src="/logo.svg" alt={companyName} width={32} height={32} className="h-8 w-8" />
+          <span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span>
         </div>
 
         {isPaid ? (

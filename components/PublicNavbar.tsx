@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Home, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 
 const links = [
   { label: 'Services', href: '#services' },
@@ -30,10 +31,8 @@ export function PublicNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#hero" className="flex items-center gap-2">
-            {logoUrl
-              ? <img src={logoUrl} alt={companyName} className="h-8 object-contain" />
-              : <><Home className="text-red-600 h-6 w-6" /><span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span></>
-            }
+            <Image src="/logo.svg" alt={companyName} width={32} height={32} className="h-8 w-8" />
+            <span className="text-xl font-bold text-slate-900 tracking-tight">{companyName}</span>
           </a>
 
           {/* Desktop links */}

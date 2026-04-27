@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Home } from 'lucide-react';
+import Image from 'next/image';
 import { toast } from 'sonner';
 import { useAuth } from '@/lib/useAuth';
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Home className="text-red-600 h-8 w-8" />
+            <Image src="/logo.svg" alt="Roofs Canada" width={36} height={36} className="h-9 w-9" />
             <span className="text-2xl font-bold text-slate-900 tracking-tight">Roofs Canada</span>
           </div>
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2">Admin Login</h1>
