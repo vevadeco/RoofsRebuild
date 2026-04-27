@@ -35,7 +35,7 @@ export function PublicNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#hero" className="flex items-center gap-2">
-            <img src={logoUrl || '/logo.svg'} alt={companyName} className="h-8 w-8 object-contain" />
+            <img src={logoUrl || '/logo.svg'} alt={companyName} className="h-8 object-contain" />
             <span className="text-xl font-bold text-slate-900 tracking-tight">{logoText}</span>
           </a>
 

@@ -34,7 +34,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <img src={logoUrl || '/logo.svg'} alt={logoText} className="h-8 w-8 object-contain" />
+            <img src={logoUrl || '/logo.svg'} alt={logoText} className="h-8 object-contain" />
             <span className="text-xl font-bold text-slate-900 tracking-tight">{logoText}</span>
           </Link>
           <div className="flex items-center gap-6">

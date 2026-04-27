@@ -47,7 +47,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <img src={logoUrl || '/logo.svg'} alt={logoText} className="h-9 w-9 object-contain" />
+            <img src={logoUrl || '/logo.svg'} alt={logoText} className="h-9 object-contain" />
             <span className="text-2xl font-bold text-slate-900 tracking-tight">{logoText}</span>
           </div>
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2">Admin Login</h1>

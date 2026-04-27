@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getSetting, initDb } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 // Public — no auth required
 export async function GET() {
   await initDb();
